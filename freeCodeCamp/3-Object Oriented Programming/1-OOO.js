@@ -143,15 +143,101 @@ Animal.prototype = {
   constructor: Animal,
 };
 
-Animal.prototype.eat = function() {
-    console.log("nom nom nom");
-  };
+Animal.prototype.eat = function () {
+  console.log("nom nom nom");
+};
 
 //use this supertype to create new instances, best to use Object.create
 
-function Dog() { }
+function Dog() {}
 
-Dog.prototype = Object.create(Animal.prototype)
+Dog.prototype = Object.create(Animal.prototype);
 let beagle = new Dog();
 
-// console.log(beagle.eat()) // returns "nom nom nom"
+// change prototype and constructor //
+
+function Animal2() {}
+Animal2.prototype.eat = function () {
+  console.log("nom nom nom");
+};
+
+function Dog3() {}
+
+Dog3.prototype = Object.create(Animal2.prototype);
+Dog3.prototype.constructor = Dog3;
+
+Dog3.prototype.bark = function () {
+  console.log("Woof!");
+};
+
+let beaglee = new Dog3();
+console.log(beaglee.bark());
+
+//use a mixin to apply properties to unrelated objects
+let bird = {
+  name: "Donald",
+  numLegs: 2,
+};
+
+let boat = {
+  name: "Warrior",
+  type: "race-boat",
+};
+
+// Only change code below this line
+
+let glideMixin = function (obj) {
+  obj.glide = function () {
+    return "I can glide.";
+  };
+};
+
+glideMixin(bird);
+glideMixin(boat);
+
+//use closure to make certain functions/properties priviledged only to that function
+
+function Bird5() {
+  let weight = 15;
+
+  this.getWeight = function () {
+    return weight;
+  };
+}
+
+let flamingo = new Bird5();
+// console.log(flamingo.getWeight()); //15
+
+//a function in the below format, wrapped in parenthesis and followed by empty parenthesis will call it immediately without needing to be invoked - immediately invoked function expressesion or IIFE
+
+(function () {
+  //   console.log("A cozy nest is ready");
+})();
+
+//mixins can be written in one larger module
+
+let isCuteMixin = function (obj) {
+  obj.isCute = function () {
+    return true;
+  };
+};
+let singMixin = function (obj) {
+  obj.sing = function () {
+    console.log("Singing to an awesome tune");
+  };
+};
+
+let funModule = (function () {
+  return {
+    singMixin: function (obj) {
+      obj.sing = function () {
+        console.log("I can sing");
+      };
+    },
+    isCuteMixin: function (obj) {
+      obj.isCute = function () {
+        console.log("I am cute");
+      };
+    },
+  };
+})();
