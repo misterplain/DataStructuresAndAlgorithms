@@ -1,3 +1,41 @@
+// Use the reduce Method to Analyze Data
+// Array.prototype.reduce(), or simply reduce(), is the most general of all array operations in JavaScript. You can solve almost any array processing problem using the reduce method.
+
+// The reduce method allows for more general forms of array processing, and it's possible to show that both filter and map can be derived as special applications of reduce. The reduce method iterates over each item in an array and returns a single value (i.e. string, number, object, array). This is achieved via a callback function that is called on each iteration.
+
+// The callback function accepts four arguments. The first argument is known as the accumulator, which gets assigned the return value of the callback function from the previous iteration, the second is the current element being processed, the third is the index of that element and the fourth is the array upon which reduce is called.
+
+// In addition to the callback function, reduce has an additional parameter which takes an initial value for the accumulator. If this second parameter is not used, then the first iteration is skipped and the second iteration gets passed the first element of the array as the accumulator.
+
+// See below for an example using reduce on the users array to return the sum of all the users' ages. For simplicity, the example only uses the first and second arguments.
+
+// const users = [
+//   { name: 'John', age: 34 },
+//   { name: 'Amy', age: 20 },
+//   { name: 'camperCat', age: 10 }
+// ];
+
+// const sumOfAges = users.reduce((sum, user) => sum + user.age, 0);
+// console.log(sumOfAges);
+// The console would display the value 64.
+
+// In another example, see how an object can be returned containing the names of the users as properties with their ages as values.
+
+// const users = [
+//   { name: 'John', age: 34 },
+//   { name: 'Amy', age: 20 },
+//   { name: 'camperCat', age: 10 }
+// ];
+
+// const usersObj = users.reduce((obj, user) => {
+//   obj[user.name] = user.age;
+//   return obj;
+// }, {});
+// console.log(usersObj);
+// The console would display the value { John: 34, Amy: 20, camperCat: 10 }.
+
+// The variable watchList holds an array of objects with information on several movies. Use reduce to find the average IMDB rating of the movies directed by Christopher Nolan. Recall from prior challenges how to filter data and map over it to pull what you need. You may need to create other variables, and return the average rating from getRating function. Note that the rating values are saved as strings in the object and need to be converted into numbers before they are used in any mathematical operations.
+
 // The global variable
 const watchList = [
   {
@@ -119,36 +157,39 @@ const watchList = [
   },
 ];
 
-// Only change code below this line
+function getRating(watchList) {
+  const nolanMovies = watchList.filter(
+    (movie) => movie["Director"] === "Christopher Nolan"
+  );
 
-const ratings = watchList.map((item) => ({
-  title: item["Title"],
-  rating: item["imdbRating"],
-}));
+  const totalRatings = nolanMovies.reduce(
+    (acc, movie) => acc + Number(movie.imdbRating),
+    0
+  );
 
-// for (let i = 0; i < watchList.length; i++) {
-//   ratings.push({title: watchList[i]["Title"], rating: watchList[i]["imdbRating"]});
-// }
+  const length = nolanMovies.length;
 
-// Only change code above this line
+  const average = totalRatings / length;
 
-console.log(JSON.stringify(ratings));
+  return average;
+}
 
-//create your own map prototype
+console.log(getRating(watchList));
 
-Array.prototype.myMap = function (callback) {
-  const newArray = [];
-  // Only change code below this line
+//alt solution # 1 using object destructuring and a count/sum object as the accumulator
 
-  for (let i = 0; i < this.length; i++) {
-    newArray.push(callback(this[i], i, this));
-  }
+function getRating(watchList) {
+  const nolanData = watchList.reduce(
+    (data, { Director: director, imdbRating: rating }) => {
+      if (director === "Christopher Nolan") {
+        data.count++;
+        data.sum += Number(rating);
+      }
+      return data;
+    },
+    { sum: 0, count: 0 }
+  );
+  const averageRating = nolanData.sum / nolanData.count;
 
-  // Only change code above this line
-  return newArray;
-};
-
-// console.log([23, 65, 98, 5, 13].myMap(item => item * 2))
-console.log(
-  [1, 1, 2, 5, 2].myMap((element, index, array) => array[index + 1] || array[0])
-);
+  return averageRating;
+}

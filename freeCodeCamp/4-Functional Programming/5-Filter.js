@@ -1,3 +1,9 @@
+// Another useful array function is Array.prototype.filter(), or simply filter().
+
+// filter calls a function on each element of an array and returns a new array containing only the elements for which that function returns a truthy value - that is, a value which returns true if passed to the Boolean() constructor. In other words, it filters the array, based on the function passed to it. Like map, it does this without needing to modify the original array.
+
+// The callback function accepts three arguments. The first argument is the current element being processed. The second is the index of that element and the third is the array upon which the filter method was called.
+
 // The global variable
 const watchList = [
   {
@@ -120,35 +126,31 @@ const watchList = [
 ];
 
 // Only change code below this line
-
-const ratings = watchList.map((item) => ({
-  title: item["Title"],
-  rating: item["imdbRating"],
-}));
-
-// for (let i = 0; i < watchList.length; i++) {
-//   ratings.push({title: watchList[i]["Title"], rating: watchList[i]["imdbRating"]});
-// }
+const filteredList = watchList
+  .filter((result) => result.imdbRating > 8.0)
+  .map((displayed) => ({
+    title: displayed["Title"],
+    rating: displayed["imdbRating"],
+  }));
 
 // Only change code above this line
 
-console.log(JSON.stringify(ratings));
+console.log(filteredList);
 
-//create your own map prototype
+//create your own filter prototype
 
-Array.prototype.myMap = function (callback) {
+Array.prototype.myFilter = function (callback) {
   const newArray = [];
-  // Only change code below this line
 
   for (let i = 0; i < this.length; i++) {
-    newArray.push(callback(this[i], i, this));
+    console.log(callback(this[i], i, this));
+    const newItem = callback(this[i], i, this);
+    //for the first test.. 0 is truthy and 1 is falsy
+    newItem ? newArray.push(this[i]) : null;
   }
-
-  // Only change code above this line
   return newArray;
 };
 
-// console.log([23, 65, 98, 5, 13].myMap(item => item * 2))
-console.log(
-  [1, 1, 2, 5, 2].myMap((element, index, array) => array[index + 1] || array[0])
-);
+// console.log([23, 65, 98, 5, 13].myFilter(item => item % 2))
+// console.log(["naomi", "quincy", "camperbot"].myFilter(element => element === "naomi"))
+// console.log([1, 1, 2, 5, 2].myFilter((element, index, array) => array.indexOf(element) === index))
