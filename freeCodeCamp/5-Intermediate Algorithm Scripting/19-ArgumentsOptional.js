@@ -11,13 +11,72 @@
 
 // If either argument isn't a valid number, return undefined.
 
-function addTogether(a, b) {
-  if (!b) {
-    return function (secondArg) {
-      return a + secondArg;
-    };
+// function addTogether(a, b) {
+//   console.log(a, b);
+//   if (typeof a === "number") {
+//     if (!b || b === undefined) {
+//       return function (secondArg) {
+//         if (typeof secondArg === "number") {
+//           return a + b;
+//         }
+//         return undefined;
+//       };
+//     }
+//     if (typeof b === "number") {
+//       return a + b;
+//     }
+//     return undefined;
+//   }
+//   return undefined;
+// }
+
+function addTogether() {
+  const [first, second] = arguments;
+  if (typeof first !== "number") {
+    return undefined;
+  } else if (arguments.length === 1) {
+    function addSecond(second) {
+      if (typeof second !== "number") {
+        return undefined;
+      } else {
+        return first + second;
+      }
+    }
+
+    return addSecond;
+  } else if (typeof second !== "number") {
+    return undefined;
+  } else {
+    return first + second;
   }
-  return a + b;
 }
 
-console.log(addTogether(2)(3));
+// console.log(addTogether(2)(3));
+// console.log(addTogether(6, 3));
+console.log(addTogether(5, undefined));
+
+//alt solution # 1
+
+function addTogether() {
+  const [first, second] = arguments;
+
+  if (typeof first === "number") {
+    if (typeof second === "number") return first + second;
+    if (arguments.length === 1) return (second) => addTogether(first, second);
+  }
+}
+
+//alt solution # 2
+
+function addTogether() {
+  const [first, second] = arguments;
+
+  function addSecond(second) {
+    if (typeof second === "number") return first + second;
+  }
+
+  if (typeof first === "number") {
+    if (arguments.length === 1) return addSecond;
+    if (arguments.length === 2) return addSecond(second);
+  }
+}
