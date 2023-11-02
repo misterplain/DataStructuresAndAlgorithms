@@ -13,54 +13,58 @@
 // For this challenge you will be presented with a string such as 800-692-7753 or 8oo-six427676;laskdjf. Your job is to validate or reject the US phone number based on any combination of the formats provided above. The area code is required. If the country code is provided, you must confirm that the country code is 1. Return true if the string is a valid US phone number; otherwise return false.
 
 function telephoneCheck(str) {
-  //test, contains 10 or 11 numbers and spaces, hyphens, and parenthesis
   const regex = /^(?=(?:[^0-9]*[0-9]){10,11}[^0-9]*$)[0-9\s\-()]+$/;
 
-  //initial check if is valid phone number
   if (!regex.test(str)) {
     return false;
   }
 
   //if there is a 1 and there are 9 other numbers
-  //reduce all to numbers
   const onlyNumbers = str.replace(/[^0-9]/g, "");
   const restOfPhoneNumber = onlyNumbers.slice(1);
-  if (onlyNumbers[0] !== "1") {
-    return false;
-  }
-  if (restOfPhoneNumber.length !== 10) {
-    return false;
-  }
 
-  //loop through valid string to deterime passability
-  //   console.log(str);
+  if (onlyNumbers[0] === "1") {
+    if (restOfPhoneNumber.length !== 10) {
+      return false;
+    }
+  }
+  if (onlyNumbers[0] !== "1") {
+    if (restOfPhoneNumber.length !== 9) {
+      return false;
+    }
+  }
 
   let countryCode = [];
   let areaCode = [];
   let centOfficeCode = [];
   let lineNumber = [];
 
-  //use a while loop to basically cut off chunks of the string to be pushed to the array
-
   for (let i = 0; i < str.length; i++) {
-    //check for 1, if total length of just numbers is 11 and str[0] === "1", countryCode.push(str[i]) as normal, i++ to get to next characted
-
-    if (str[i] === "1") {
-      countryCode.push(str[0]);
-      continue;
+    if (onlyNumbers.length === 11) {
+      console.log("onlyNumbers is 11, includes 1");
+      if (str[i] === "1") {
+        if (i > 0) {
+          console.log("item before the 1");
+          return false;
+        } else {
+          console.log(i - 1);
+          console.log(str[i - 1]);
+          countryCode.push(str[i]);
+          continue;
+        }
+      }
     }
-    //if next char is (, it MUST have a ) at i+4, if not return false. If true push str[i] to str[i+4] and rather than slice the string, set i to i+5 so that it skips over the iterations in the middle
-    //only access if areaCode.length >= 1
-    if (countryCode.length === 1 && areaCode.length < 1) {
+
+    //sorting the countryCode
+    if (areaCode.length < 1) {
       let slicedFromHere = str.slice(i);
       console.log("*" + slicedFromHere + "*" + " areaCode sliced From here");
       if (str[i] === "(") {
         if (str[i + 4] === ")") {
-          console.log("format is '(555)'");
+          console.log("areaCode format is '(555)'");
           areaCode.push(str.slice(i, i + 5));
           i += 5;
         } else {
-          // Invalid format
           return false;
         }
       } else if (str[i] === " ") {
@@ -70,7 +74,7 @@ function telephoneCheck(str) {
           !isNaN(str[i + 3]) &&
           !isNaN(str[i + 4])
         ) {
-          console.log("format is ' 555'");
+          console.log("areaCode format is ' 555'");
           areaCode.push(str.slice(i, i + 4));
           i += 4;
         } else if (
@@ -78,12 +82,11 @@ function telephoneCheck(str) {
           str[i + 5] === ")" &&
           str[i + 6] === " "
         ) {
-          // Format is " (555) "
-          console.log("format is (555)");
+          console.log("areaCode format is (555)");
           areaCode.push(str.slice(i, i + 7));
           i += 7;
         } else if (str[i + 4] === " ") {
-          console.log("format is  ' 555 ' ");
+          console.log("areaCode format is  ' 555 ' ");
           areaCode.push(str.slice(i, i + 5));
           i += 5;
         } else if (!isNaN(str[i + 4]) || str[i + 4] === "-") {
@@ -92,10 +95,12 @@ function telephoneCheck(str) {
         } else {
           console.log("invalid format from areaCode");
           return false;
-          // Invalid format
         }
       } else if (!isNaN(str[i])) {
-        console.log("format is '555' ");
+        if (isNaN(str[i + 3] && isNaN(str[i + 4]))) {
+          return false;
+        }
+        console.log("areaCode format is '555' ");
         areaCode.push(str.slice(i, i + 3));
         i += 3;
       } else {
@@ -103,8 +108,8 @@ function telephoneCheck(str) {
       }
     }
 
+    //sorting the areaCode
     if (areaCode.length === 1 && centOfficeCode.length < 1) {
-      // console.log(str[i])
       let slicedFromHere = str.slice(i);
       console.log(
         "*" + slicedFromHere + "*" + " centOfficeCode sliced From here"
@@ -112,38 +117,102 @@ function telephoneCheck(str) {
       let lengthAreaCode = areaCode[0];
       let areaCodeLastChar = lengthAreaCode[lengthAreaCode.length - 1];
 
-      //if i is hyphen and last char of areaCode is space or parenthesis, return false
       if (str[i] === "-") {
         if (areaCodeLastChar === " " || areaCodeLastChar === ")") {
           console.log(
             "false, centOffice start with hyphen and areaCode ends with space or parenthesis "
           );
           return false;
-        } //if i is hyphen and i=4 is a hypen, push to centOfficeCode
-        else if (str[i + 4] === "-") {
+        } else if (str[i + 4] === "-") {
+          console.log("centOfficeCode format '-555-'");
           centOfficeCode.push(str.slice(i, i + 5));
           i += 5;
         } else {
-          console.log("invalid format");
+          console.log("centOfficeCode invalid format");
+          return false;
         }
-      }
-
-      ///
-      else if (!isNaN(str[i]) && !isNaN(str[i + 1]) && !isNaN(str[i + 2])) {
-        centOfficeCode.push(str.slice(i, i + 3));
-        i += 3;
-      }
-      ///
-      else if (!isNaN(str[i])) {
-        if (str[i + 4] === "-" || str[i + 4] === " ") {
+      } else if (str[i] === " " && !isNaN(str[i + 1])) {
+        if (areaCodeLastChar === " " || areaCodeLastChar === ")") {
+          console.log(
+            "false, centOffice start with hyphen and areaCode ends with space or parenthesis "
+          );
+          return false;
+        }
+        if (!isNaN(str[i + 1]) && !isNaN(str[i + 2]) && !isNaN(str[i + 3])) {
+          console.log("centOfficeCode format ' 555'");
           centOfficeCode.push(str.slice(i, i + 4));
           i += 4;
         }
+      } else if (!isNaN(str[i])) {
+        if (str[i + 4] === "-" || str[i + 4] === " ") {
+          console.log("centOfficeCode format '555-' or '555 ");
+          centOfficeCode.push(str.slice(i, i + 4));
+          i += 4;
+        } else if (isNaN(str[i + 1]) || isNaN(str[i + 2])) {
+          console.log(isNaN(str[i + 1]) + str[i + 1]);
+          console.log(isNaN(str[i + 2]) + str[i + 2]);
+          return false;
+        } else {
+          console.log("centOfficeCode format '555'");
+          centOfficeCode.push(str.slice(i, i + 4));
+          i += 4;
+        }
+      } else {
+        console.log("invalid centOfficeCode format");
+        return false;
       }
-      //if i is a number and i+4 is hyphen or space, push those 4 items
     }
 
-    //same thing for phone and number
+    //sorting the centOfficeCode
+    if (centOfficeCode.length === 1 && lineNumber.length < 1) {
+      let slicedFromHere = str.slice(i);
+      console.log("*" + slicedFromHere + "*" + " lineNumber sliced From here");
+      let lengthCentOfficeCode = centOfficeCode[0];
+      let centOfficeCodeLastChar =
+        lengthCentOfficeCode[lengthCentOfficeCode.length - 1];
+
+      if (str[i] === "-") {
+        if (
+          centOfficeCodeLastChar === " " ||
+          centOfficeCodeLastChar === ")" ||
+          centOfficeCodeLastChar === "-"
+        ) {
+          console.log("lineNumber invalid format");
+          return false;
+        } else {
+          lineNumber.push(str.slice(i));
+        }
+      } else if (str[i] === " " && !isNaN(str[i + 1])) {
+        if (
+          centOfficeCodeLastChar === " " ||
+          centOfficeCodeLastChar === ")" ||
+          centOfficeCodeLastChar === "-"
+        ) {
+          console.log(
+            "false, lineNumber start with hyphen and areaCode ends with space or parenthesis "
+          );
+          return false;
+        }
+        if (!isNaN(str[i + 1]) && !isNaN(str[i + 2]) && !isNaN(str[i + 3])) {
+          console.log("lineNumber format ' 555'");
+          lineNumber.push(str.slice(i, i + 4));
+          i += 4;
+        }
+      } else if (!isNaN(str[i])) {
+        if (str[i + 4] === "-" || str[i + 4] === " ") {
+          console.log("lineNumber format '555-' or '555 ");
+          lineNumber.push(str.slice(i, i + 4));
+          i += 4;
+        } else {
+          console.log("lineNumber format '555'");
+          lineNumber.push(str.slice(i, i + 4));
+          i += 4;
+        }
+      } else {
+        console.log("invalid lineNumber format");
+        return false;
+      }
+    }
   }
 
   console.log({
@@ -153,44 +222,28 @@ function telephoneCheck(str) {
     centOfficeCode,
     lineNumber,
   });
+  return true;
 }
 
-telephoneCheck("1 555-555-5555");
 
-// while (str.length) {
-//     // let currentChar = str[0];
-//     // console.log(parseInt(currentChar, 10));
-//     // console.log(str);
-//     // console.log(onlyNumbers.length)
-//     // if (onlyNumbers[0] === "1" && countryCode.length !== 1) {
-//     //   countryCode.push(currentChar);
-//     //   str = str.slice(1);
-//     //   continue;
-//     // }
-//     // if (
-//     //   currentChar === "(" ||
-//     //   currentChar === ")" ||
-//     //   currentChar === "-" ||
-//     //   currentChar === " " ||
-//     //   typeof parseInt(currentChar, 10) === "number"
-//     // ) {
-//     //   areaCode.push(currentChar);
-//     //   str = str.slice(1);
-//     // }
-//     // Processing area code
-//     // if (areaCode.length < 5) {
-//     //   // Allow for up to 5 characters: e.g., (123)
-//     //   if (currentChar === "(") {
-//     //     areaCode.push(currentChar);
-//     //   } else if (currentChar === ")") {
-//     //     areaCode.push(currentChar);
-//     //   } else if (/[0-9]/.test(currentChar)) {
-//     //     areaCode.push(currentChar);
-//     //   } else {
-//     //     return false;
-//     //   }
-//     //   str = str.slice(1);
-//     //   continue;
-//     // }
-//     // str = str.slice(1);
-//   }
+// console.log(telephoneCheck("1 555 555-5555"));
+// console.log(telephoneCheck("555)-555-5555"));
+// console.log(telephoneCheck("1 555-555-5555"));
+// console.log(telephoneCheck("-1 (757) 622-7382"));
+// console.log(telephoneCheck("555)555-5555"));
+telephoneCheck2("55 55-55-555-5");
+// console.log(telephoneCheck("5555555555"))
+
+//alt solution # 1 - this whole problem can be solved with one line of regex....
+
+//https://github.com/xdelmo/telephone-number-validator
+
+function telephoneCheck2(str) {
+  let regExp = /^(1\s?)?(\d{3}|\(\d{3}\))[\-\s]?\d{3}[\-\s]?\d{4}$/;
+
+  return regExp.test(str);
+}
+
+//explanation
+
+//https://www.youtube.com/watch?v=t6Yr2PBmwC0
