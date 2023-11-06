@@ -13,7 +13,11 @@ function staircase(n) {
     console.log(temporaryString);
     temporaryString = "";
   }
+
+  return temporaryString
 }
+
+console.log(staircase(4))
 
 //alt solution # 1 - padEnd and padStart
 

@@ -6,13 +6,14 @@ function diagonalDifference(arr) {
 
   for (let i = 0; i < arr.length; i++) {
     leftsum = leftsum + arr[i][i];
-    rightsum = rightsum = arr[i][arr.length - 1 - i];
+    rightsum = rightsum + arr[i][arr.length - 1 - i];
   }
 
   console.log(leftsum);
   console.log(rightsum);
 
   console.log(Math.abs(leftsum - rightsum));
+  console.log(leftsum, rightsum)
 
   const absoluteDifference = Math.abs(leftsum - rightsum);
 
@@ -20,7 +21,7 @@ function diagonalDifference(arr) {
 }
 
 diagonalDifference([
-  [1, 2, 3],
+  [11, 2, 4],
   [4, 5, 6],
-  [7, 8, 9],
+  [10, 8, -12],
 ]);
