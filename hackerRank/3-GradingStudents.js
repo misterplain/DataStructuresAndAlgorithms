@@ -18,4 +18,4 @@ function convertGrades(grades) {
   return updatedGrades;
 }
 
-console.log(convertGrades([38, 45, 28, 98, 88, 94, 78, 40, 67, 100]));
+console.log(convertGrades([37,38]));
