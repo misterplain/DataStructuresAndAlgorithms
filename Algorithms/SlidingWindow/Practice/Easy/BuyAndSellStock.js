@@ -9,19 +9,15 @@ var maxProfit = function (prices) {
 
   while (right < prices.length) {
     if (prices[right] < min) {
-      // If we find a new minimum price, update min and max
       min = prices[right];
       max = prices[right];
     } else if (prices[right] > max) {
-      // If the current price is higher than max, update max
       max = prices[right];
     }
 
-    // Calculate the current profit
     const currentProfit = max - min;
 
     if (currentProfit > profit) {
-      // If the current profit is higher than the previous max profit, update profit
       profit = currentProfit;
     }
 
