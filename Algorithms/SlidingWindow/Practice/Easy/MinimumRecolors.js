@@ -32,19 +32,30 @@
 // blocks[i] is either 'W' or 'B'.
 // 1 <= k <= n
 
-var minimumRecolors = function(blocks, k) {
-    let min = k, whiteBlockCount = 0;
+var minimumRecolors = function (blocks, k) {
+  let min = k,
+    whiteBlockCount = 0;
 
-    for (let i = 0; i < blocks.length; i++) {
-        if (blocks[i] === "W") whiteBlockCount++;
+  for (let i = 0; i < blocks.length; i++) {
+    if (blocks[i] === "W") whiteBlockCount++;
 
-        if (i >= k - 1) {
-            if (blocks[i - k] === "W") whiteBlockCount--;
-            min = Math.min(min, whiteBlockCount);
-        }
+    if (i >= k - 1) {
+      if (blocks[i - k] === "W") whiteBlockCount--;
+      min = Math.min(min, whiteBlockCount);
     }
-    return min;
+
+    console.log({
+      iteration: i,
+      color: blocks[i],
+      iterationaToRemove: blocks[i-k],
+      beforeWindow: blocks.slice(i - k + 1, i + 1), // Array of items within the window
+      whiteBlockCount,
+      min,
+      enterSecondFor: i >= k - 1,
+    });
+  }
+  return min;
 };
 
-// console.log(minimumRecolors("WBBWWBBWBW", 7));
-console.log(minimumRecolors("WBWBBBW", 2));
+console.log(minimumRecolors("WBBWWBBWBW", 7));
+// console.log(minimumRecolors("WBWBBBW", 2));
