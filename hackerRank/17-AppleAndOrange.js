@@ -54,39 +54,56 @@ function countApplesAndOranges(
   applesArray,
   orangesArray
 ) {
+  let countApple = 0;
+  let countOrange = 0;
 
-  let countApple = 0
-  let countOrange = 0
+  for (let i = 0; i < applesArray.length; i++) {
+    const landingLocation = applesArray[i] + appleTreeLocation;
 
-  const applesEndingLocations = applesArray.map(
-    (item) => appleTreeLocation + item
-  );
-  const orangesEndingLocations = orangesArray.map(
-    (item) => orangeTreeLocation + item
-  );
-
-  for (let i = 0; i < applesEndingLocations.length; i++) {
-    if (
-      applesEndingLocations[i] >= startHouse &&
-      applesEndingLocations[i] <= endHouse
-    ) {
-      countApple++
-      console.log("apple added");
-
+    if (landingLocation >= startHouse && landingLocation <= endHouse) {
+      countApple++;
     }
   }
 
-  for (let i = 0; i < orangesEndingLocations.length; i++) {
-    if (
-      orangesEndingLocations[i] >= startHouse &&
-      orangesEndingLocations[i] <= endHouse
-    ) {
-      countOrange++
+  for (let i = 0; i < orangesArray.length; i++) {
+    const landingLocation = orangesArray[i] + orangeTreeLocation;
+
+    if (landingLocation >= startHouse && landingLocation <= endHouse) {
+      countOrange++;
     }
   }
 
+  console.log(countApple)
+  console.log(countOrange)
 
-  return countApple + "\n" + countOrange
+  // const applesEndingLocations = applesArray.map(
+  //   (item) => appleTreeLocation + item
+  // );
+  // const orangesEndingLocations = orangesArray.map(
+  //   (item) => orangeTreeLocation + item
+  // );
+
+  // for (let i = 0; i < applesEndingLocations.length; i++) {
+  //   if (
+  //     applesEndingLocations[i] >= startHouse &&
+  //     applesEndingLocations[i] <= endHouse
+  //   ) {
+  //     countApple++
+  //     console.log("apple added");
+
+  //   }
+  // }
+
+  // for (let i = 0; i < orangesEndingLocations.length; i++) {
+  //   if (
+  //     orangesEndingLocations[i] >= startHouse &&
+  //     orangesEndingLocations[i] <= endHouse
+  //   ) {
+  //     countOrange++
+  //   }
+  // }
+
+  // return countApple + "\n" + countOrange
 }
 
 console.log(countApplesAndOranges(7, 11, 5, 15, [-2, 2, 1], [6, -6]));

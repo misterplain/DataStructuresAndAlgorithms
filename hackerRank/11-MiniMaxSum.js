@@ -48,27 +48,34 @@ Sum everything except , the sum is .
 */
 
 function miniMaxSum(arr) {
-  let minSum = 0;
-  let maxSum = 0;
+  let minSum = Infinity; // Number.MAX_SAFE_INTEGER;
+  let maxSum = Number.MIN_SAFE_INTEGER;
 
   for (let i = 0; i < arr.length; i++) {
     let tempSum = 0;
     for (let k = 0; k < arr.length; k++) {
-      if (arr[k] !== arr[i]) {
-        console.log(arr[k]);
+      if (k !== i) {
+        // console.log(arr[k]);
         tempSum += arr[k];
       }
     }
-    minSum = maxSum;
+    console.log(tempSum + "tempSum");
+    // minSum = maxSum;
     if (tempSum > maxSum) {
       maxSum = tempSum;
-    } else if (tempSum < minSum) {
+    }
+    if (tempSum < minSum) {
       minSum = tempSum;
     }
   }
 
-console.log(minSum + " " + maxSum)
-  return `${minSum} ${maxSum}`
+  console.log(minSum + " " + maxSum);
+  // return `${minSum} ${maxSum}`;
 }
 
-console.log(miniMaxSum([1, 3, 5, 7, 9]));
+console.log(
+  miniMaxSum([769082435, 210437958, 673982045, 375809214, 380564127])
+);
+
+//1735893734 2199437821
+//expected 1640793344 2199437821

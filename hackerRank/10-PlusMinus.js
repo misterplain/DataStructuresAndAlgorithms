@@ -75,21 +75,21 @@ function plusMinus(arr) {
   const negativeProportion = neg / total;
   const zeroProportion = zero / total;
 
-let posFixed = parseFloat(positiveProportion.toPrecision(6));
-let negFixed = parseFloat(negativeProportion.toFixed(6));
-let zeroFixed = zeroProportion.toFixed(6);
+  let posFixed = parseFloat(positiveProportion.toPrecision(6));
+  let negFixed = parseFloat(negativeProportion.toPrecision(6));
+  let zeroFixed = zeroProportion.toFixed(6);
 
-console.log([posFixed, negFixed, zeroFixed])
+  // console.log([posFixed, negFixed, zeroFixed])
+  console.log(posFixed);
+  console.log(negFixed);
+  console.log(zeroFixed);
 
-
-  return [
-    // positiveProportion.toFixed(6),
-    // negativeProportion.toFixed(6),
-    // zeroProportion.toFixed(6)
-  ];
+  // return [
+  //   // positiveProportion.toFixed(6),
+  //   // negativeProportion.toFixed(6),
+  //   // zeroProportion.toFixed(6)
+  // ];
 }
 
-
-
 // console.log(plusMinus([1, 1, 0, -1, -1]));
-console.log(plusMinus([-4, 3, -9, 0, 4, 1]));
+plusMinus([-4, 3, -9, 0, 4, 1]);
